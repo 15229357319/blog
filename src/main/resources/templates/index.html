@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="baidu_union_verify" content="db74441fbdc7d991ebcd030e803b6f4d">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link th:href="@{/images/favicon.ico}" rel="icon" type="image/x-icon" />
+  <title th:text="${title} + '-倪升武的博客'"></title>
+  <meta name="keywords" content="架构,微服务,程序员,编程,教程,代码,Java" />
+  <meta name="description" content="倪升武的个人博客站点，分享优质博客文章和资源" />
+  <!--<title th:replace="${title}"></title>-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
+  <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
+  <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
+  <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
+  <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?05ad68910d5503f11833c31caf579be6";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+</head>
+<body th:inline="javascript">
+
+  <!--导航-->
+  <nav th:replace="_fragments :: menu(1)"></nav>
+
+  <!--中间内容-->
+  <div  class="m-container m-padded-tb-big animated fadeIn">
+    <div class="ui container">
+      <div class="ui stackable grid">
+        <!--左边博客列表-->
+        <div class="eleven wide column">
+          <!--header-->
+          <div class="ui top attached segment">
+            <div class="ui middle aligned two column grid">
+              <div class="column">
+                <h3 class="ui teal header">Blogs</h3>
+              </div>
+              <div class="right aligned column">
+                共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${application.total}"></h2> 篇
+              </div>
+            </div>
+          </div>
+
+          <!--content-->
+          <div class="ui attached  segment">
+
+            <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.list}">
+              <div class="ui aligned mobile reversed stackable grid" >
+                <div class="eleven wide column">
+                  <h3 class="ui header" ><a th:href="@{/blog/{id}(id=${blog.id})}" class="m-black" th:text="${blog.title}"></a></h3>
+                  <p class="m-text" th:text="|摘要：${#strings.abbreviate(blog.description,66)}"></p>
+                  <div class="ui grid">
+                    <div class="nine wide column">
+                      <div class="ui mini horizontal link list">
+                        <!--<div class="item">-->
+                          <!--<img src="https://unsplash.it/100/100?image=1005" th:src="@{${blog.user.avator}}"  alt="" class="ui avatar image">-->
+                          <!--<div class="content"><a href="#" class="header" th:text="${blog.user.username}" ></a></div>-->
+                        <!--</div>-->
+                        <div class="item">
+                          <!--<i class="calendar icon"></i><span th:text="${#strings.substring(blog.create,0,10)}"></span>-->
+                          <i class="calendar icon"></i><span th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}"></span>
+                        </div>
+                        <div class="item">
+                          <i class="eye icon"></i> <span th:text="${blog.views}"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <!--<div class="right aligned seven wide column">-->
+                      <!--<a th:href="@{/types/{id}(id=${blog.type.id})}" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}"></a>-->
+                    <!--</div>-->
+                    <!--<div class="row">-->
+                      <!--<div class="column">-->
+                        <!--<a th:href="@{/tags/{id}(id=${tag.id})}" class="ui  basic left pointing label m-padded-mini m-text-thin" th:each="tag : ${blog.tags}" th:text="${tag.name}"></a>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  </div>
+                </div>
+
+                <div class="five wide column">
+                  <a th:href="@{/blog/{id}(id=${blog.id})}">
+                    <img th:src="@{${blog.firstPicture}}"  alt="" class="ui rounded image">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--footer-->
+          <div class="ui bottom attached segment" th:if="${page.pages} > 1">
+            <div class="ui middle aligned two column grid">
+              <div class="column">
+                <a th:href="@{/(page=${page.pageNum} - 1)}"  th:if="${page.prePage >= 1}" class="ui mini teal basic button">上一页</a>
+              </div>
+              <div class="right aligned column">
+                <a th:href="@{/(page=${page.pageNum} + 1)}"  th:unless="${page.isLastPage}" class="ui mini teal basic button">下一页</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!--右边的top-->
+        <div class="five wide column">
+
+          <!--分类-->
+          <div class="ui segments">
+            <div class="ui secondary segment">
+              <div class="ui two column grid">
+                <div class="column">
+                  <i class="idea icon"></i>分类
+                </div>
+                <div class="right aligned column">
+                  <a th:href="@{types/-1}">more <i class="angle double right icon"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="ui teal segment">
+              <div class="ui fluid vertical menu" >
+                <a th:href="@{/types/{id}(id=${type.id})}" class="item"  th:each="type : ${application.types}">
+                  <span th:text="${type.name}"></span>
+                  <div class="ui teal basic left pointing label" th:text="${type.blogNum}"></div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!--标签-->
+          <div class="ui segments m-margin-top-large">
+            <div class="ui secondary segment">
+              <div class="ui two column grid">
+                <div class="column">
+                  <i class="tags icon"></i>标签
+                </div>
+                <div class="right aligned column">
+                  <a href="#" th:href="@{tags/-1}">more <i class="angle double right icon"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="ui teal segment">
+              <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" class="ui teal basic left pointing label m-margin-tb-tiny" th:each="tag : ${application.tags}">
+                <span th:text="${tag.name}"></span> <div class="detail" th:text="${tag.blogNum}"></div>
+              </a>
+            </div>
+          </div>
+
+          <div class="ui segments m-margin-top-large">
+            <div class="ui secondary segment ">
+              <i class="bookmark icon"></i>阅读排行
+            </div>
+            <div class="ui segment" th:each="blog : ${application.views}">
+              <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="m-black m-text-thin" th:text="|${blog.title} ( ${blog.views} )|">用户故事（User Story）</a>
+            </div>
+          </div>
+
+          <!--二维码-->
+          <!--<h4 class="ui horizontal divider header m-margin-top-large">扫码关注我</h4>-->
+          <!--<div class="ui centered card" style="width: 11em">-->
+            <!--<img th:src="@{/images/wechat.jpg}" alt="" class="ui rounded image" >-->
+          <!--</div>-->
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <footer th:replace="_fragments :: footer"></footer>
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<!--/*/</th:block>/*/-->
+
+  <script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+  </script>
+  <!--<script>-->
+      <!--window.onload = function () {-->
+          <!--document.title = [[${title}]];-->
+      <!--}-->
+  <!--</script>-->
+</body>
+</html>

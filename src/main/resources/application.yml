@@ -1,0 +1,43 @@
+#服务端口
+server:
+  port: 8081
+
+#数据库地址
+datasource:
+  url: localhost:3306/blog
+
+#数据库配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${datasource.url}?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+    username: blog
+    password: 900e4b8b229ab807a193e73875247c32
+    hikari:
+      maximum-pool-size: 10 #连接池最大连接10
+      max-lifetime: 1770000
+
+#  关闭缓存
+  thymeleaf:
+    cache: false
+
+
+logging:
+  level:
+      com.porsche.xuhao.blog.dao: trace  #此包下的Mapper日志输出级别为Trace
+  config: logback.xml
+
+mybatis:
+#指定别名设置的包为所有entity
+  type-aliases-package: com.porsche.xuhao.blog.entity
+#  configuration:
+#    map-underscore-to-camel-case: true #开启驼峰命名
+  mapper-locations:
+    - classpath:mapper/*.xml
+
+mapper:
+  mappers:
+    - com.porsche.xuhao.blog.core.BaseMapper
+  not-empty: false
+  identity: MYSQL
+

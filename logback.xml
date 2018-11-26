@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <!--日志格式-->
+    <property name = "LOG_PATTERN" value = "%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <!--日志文件路径-->
+    <property name = "INFO_FILE_PATH" value="F:/IDEA_PROJECT/logs/blog/blog_info.%d{yyyy-MM-dd}.%i.log"/>
+    <property name = "ERROR_FILE_PATH" value="F:/IDEA_PROJECT/logs/blog/blog_error.%d{yyyy-MM-dd}.%i.log"/>
+
+    <!--输出到控制台-->
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <!--展示格式 layout-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!--输出info日志到文件blog_info.%d.log-->
+    <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <!--只输出INFO级别的日志-->
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class = "ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${INFO_FILE_PATH}</fileNamePattern>
+            <!--日志保存15天-->
+            <maxHistory>15</maxHistory>
+            <!--单个日志文件的最大，超过则新建日志文件存储-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!--输出error日志到文件blog_error.%d.log-->
+    <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class = "ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--只输出ERROR级别的日志-->
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class = "ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${ERROR_FILE_PATH}</fileNamePattern>
+            <!--日志保存15天-->
+            <maxHistory>15</maxHistory>
+            <!--单个日志文件的最大，超过则新建日志文件存储-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="consoleLog"/>
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileErrorLog"/>
+    </root>
+
+</configuration>
